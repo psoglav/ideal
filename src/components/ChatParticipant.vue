@@ -180,7 +180,7 @@ export default {
           duration: anime.random(800, 1000),
           complete() {
             self.staringAvatarAnimation = null
-            self.startAnimatingStaringAvatar()
+            if(!self.mouseControlledLook) self.startAnimatingStaringAvatar()
           },
         })
       } else {
@@ -191,6 +191,12 @@ export default {
       if (this.staringAvatarAnimation) {
         this.staringAvatarAnimation.pause()
         this.goOnline()
+      }
+    },
+    destroyStaringAvatarAnimation() {
+      if(this.staringAvatarAnimation) {
+        this.staringAvatarAnimation.pause()
+        this.staringAvatarAnimation = null
       }
     },
     setOnline() {
@@ -210,6 +216,7 @@ export default {
     },
     mouseMoveHandler(e) {
       this.mouseControlledLook = true
+      this.destroyStaringAvatarAnimation()
 
       if (this.status != 'staring') {
         this.setOnline()
