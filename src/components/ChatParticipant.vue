@@ -1,10 +1,12 @@
 <template>
   <div class="chat-participant">
-    <div v-show="!me" ref="pName" class="chat-participant-name">{{ name }}</div>
+    <div v-show="!profile.me" ref="pName" class="chat-participant-name">
+      {{ profile.name }}
+    </div>
     <div ref="pAvatar" :class="{ online }" class="chat-participant-avatar">
       <div ref="hitLight" class="chat-participant-avatar_hit-light"></div>
     </div>
-    <div v-show="!me" ref="pStatus" class="chat-participant-status">
+    <div v-show="!profile.me" ref="pStatus" class="chat-participant-status">
       {{ computedStatus }}
       <div
         v-show="waiting"
@@ -32,22 +34,14 @@ import anime from 'animejs'
 export default {
   name: 'ChatParticipant',
   props: {
-    name: {
-      type: String,
-      default: 'Stranger',
-    },
-    me: {
-      type: Boolean,
-      default: false,
+    profile: {
+      type: Object,
+      default: () => ({ name: 'Stranger', status: 'out' }),
     },
     lightColor: {
       type: String,
       default: '#bbbbff',
     },
-    // status: {
-    // type: String,
-    // default: 'out',
-    // },
   },
   data: () => ({
     statuses: {
@@ -55,7 +49,6 @@ export default {
       out: 'is out',
       staring: 'is staring',
     },
-    status: 'out',
     handledStatus: '',
     waitingStatuses: ['typing'],
     waitingAnimation: null,
@@ -66,7 +59,7 @@ export default {
     mouseControlledLook: false,
   }),
   watch: {
-    status: {
+    'profile.status': {
       immediate: true,
       handler(val) {
         const self = this
@@ -104,13 +97,13 @@ export default {
   },
   computed: {
     online() {
-      return this.status != 'out'
+      return this.profile.status != 'out'
     },
     computedStatus() {
       return this.statuses[this.handledStatus]
     },
     waiting() {
-      return this.waitingStatuses.includes(this.status)
+      return this.waitingStatuses.includes(this.profile.status)
     },
   },
   methods: {
@@ -195,7 +188,7 @@ export default {
       this.mouseControlledLook = true
       this.destroyStaringAvatarAnimation()
 
-      if (this.status != 'staring') {
+      if (this.profile.status != 'staring') {
         this.adjustLightToOnlineStatus()
         return
       }
@@ -228,12 +221,12 @@ export default {
       }, 20)
     },
     hitParticipant() {
-      if (!this.me) {
+      if (!this.profile.me) {
         this.hit()
       }
     },
     hitMe() {
-      if (this.me) {
+      if (this.profile.me) {
         this.hit()
       }
     },
@@ -245,33 +238,33 @@ export default {
   mounted() {
     let self = this
 
-    if (this.me) {
-      this.status = 'staring'
+    if (this.profile.me) {
+      this.profile.status = 'staring'
       document.addEventListener('mousemove', this.mouseMoveHandler)
     } else {
       setTimeout(function() {
-        self.status = 'staring'
+        self.profile.status = 'staring'
         setTimeout(function() {
-          self.status = 'typing'
+          self.profile.status = 'typing'
           setTimeout(function() {
             self.$root.$emit('hit-me')
-            self.status = 'staring'
+            self.profile.status = 'staring'
             setTimeout(function() {
-              self.status = 'typing'
+              self.profile.status = 'typing'
               setTimeout(function() {
                 self.$root.$emit('hit-me')
-                self.status = 'out'
-              }, 5000)
-            }, 1000)
-          }, 5000)
-        }, 8000)
-      }, 3000)
+                self.profile.status = 'out'
+              }, 600)
+            }, 600)
+          }, 2600)
+        }, 5600)
+      }, 600)
     }
 
     this.defineAnimations()
   },
   beforeDestroy() {
-    if (this.me) {
+    if (this.profile.me) {
       document.removeEventListener('mousemove', this.mouseMoveHandler)
     }
 
