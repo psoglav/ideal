@@ -1,21 +1,23 @@
 <template>
   <div class="chat">
     <chat-participant name="wwwolfie" status="typing" />
-    <div class="connection">
-      <div class="connection-bottom-line"></div>
-      <div class="connection-top-line"></div>
-    </div>
+    <connection />
     <chat-participant me status="typing" />
   </div>
 </template>
 
 <script>
-import ChatParticipant from '../components/ChatParticipant.vue'
+import Connection from '~/Connection'
+import ChatParticipant from '~/ChatParticipant'
 
 export default {
   name: 'Chat',
   components: {
+    Connection,
     ChatParticipant,
+  },
+  data() {
+    return { connectionSegments: 10 }
   },
 }
 </script>
@@ -24,34 +26,9 @@ export default {
 .chat {
   position: relative;
   display: grid;
-  height: 100vh;
+  min-height: 500px;
+  height: calc(100vh - 70px);
   padding: 60px 0;
   align-content: space-between;
-
-  .connection {
-    position: absolute;
-    top: 70px;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-
-    &-bottom-line,
-    &-top-line {
-      position: absolute;
-      height: calc(100% - 140px);
-      border-left: 1px solid white;
-      border-left-style: dashed;
-    }
-
-    &-bottom-line {
-      left: calc(50% - 10px);
-    }
-    &-top-line {
-      left: calc(50% + 10px);
-    }
-  }
-
-  &-participant {
-  }
 }
 </style>

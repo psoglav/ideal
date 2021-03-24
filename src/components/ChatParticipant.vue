@@ -272,6 +272,7 @@ export default {
   align-items: center;
   justify-items: center;
   font-family: Montserrat;
+  z-index: 10;
 
   &-name {
     grid-area: name;
@@ -286,7 +287,18 @@ export default {
     height: 60px;
     border-radius: 100%;
     background-color: #fff;
+    position: relative;
     // transition: box-shadow 0.4s;
+
+    &::after {
+      content: ' ';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: 1px blue solid;
+    }
 
     &.online {
       box-shadow: 0 0 0px 0px #bbbbff;
