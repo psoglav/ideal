@@ -1,4 +1,4 @@
-<template>
+p<template>
   <div class="container">
     <div class="container_messages">
       <div
@@ -15,15 +15,15 @@
             {{ formatTime(stack[0].at) }}
           </span>
         </div>
-        <div
+        <p
           v-for="(message, k) in stack"
           :key="k"
           class="container_messages-stack_item"
           :class="{ stacked: stack.length > 1 }"
         >
-          <div class="highlight"></div>
+          <span class="highlight"></span>
           {{ message.content.text }}
-        </div>
+        </p>
       </div>
     </div>
   </div>
@@ -40,7 +40,8 @@ export default {
       messages: [
         {
           content: {
-            text: 'Query parameters can also be provided, either with the query option or directly in the url (example: http://localhost/users?token=abc).',
+            text:
+              'Query parameters can also be provided, either with the query option or directly in the url (example: http://localhost/users?token=abc).',
             attachments: [
               {
                 type: 'image',
@@ -54,7 +55,8 @@ export default {
         },
         {
           content: {
-            text: 'Creates a new Manager for the given URL, and attempts to reuse an existing Manager for subsequent calls, unless the multiplex option is passed with false. Passing this option is the equivalent of passing "force new connection": true or forceNew: true.',
+            text:
+              'Creates a new Manager for the given URL, and attempts to reuse an existing Manager for subsequent calls, unless the multiplex option is passed with false. Passing this option is the equivalent of passing "force new connection": true or forceNew: true.',
             attachments: [
               {
                 type: 'image',
@@ -68,7 +70,8 @@ export default {
         },
         {
           content: {
-            text: 'A new Socket instance is returned for the namespace specified by the pathname in the URL, defaulting to /. For example, if the url is http://localhost/users, a transport connection will be established to http://localhost and a Socket.IO connection will be established to /users.',
+            text:
+              'A new Socket instance is returned for the namespace specified by the pathname in the URL, defaulting to /. For example, if the url is http://localhost/users, a transport connection will be established to http://localhost and a Socket.IO connection will be established to /users.',
             attachments: [
               {
                 type: 'image',
@@ -99,6 +102,21 @@ export default {
           content: {
             text:
               'Offload aged data from your Atlas cluster to a lower-cost, queryable storage tier. Create an Online Archive to start saving on storage costs.',
+            attachments: [
+              {
+                type: 'image',
+                url:
+                  'https://sun9-61.userapi.com/impg/AAUWN4BdMpMFYZ2P4IcPAGmKHD85z2PoPdwBWw/uk5z5GJFvQs.jpg?size=563x751&quality=96&sign=eb6853c14b4ee76fc5517e2de382513c&type=album',
+              },
+            ],
+          },
+          user: 1,
+          at: +new Date() + 67400 * 8,
+        },
+        {
+          content: {
+            text:
+              'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
             attachments: [
               {
                 type: 'image',
@@ -182,6 +200,8 @@ $msg-hover-time: 0.4s;
   width: 100%;
   overflow: auto;
   overflow-x: hidden;
+  background-color: #bbccff17;
+  box-shadow: inset 0 0 45px 25px black;
 
   &_messages {
     width: 100%;
@@ -198,12 +218,17 @@ $msg-hover-time: 0.4s;
       grid-gap: $msg-gap;
       position: relative;
       transform-style: preserve-3d;
-      perspective: 1200px;
-      perspective-origin: 100% 0%;
+      perspective: 1500px;
+      perspective-origin: 0% 0%;
       transition: transform 0.2s;
 
       &:hover {
         transform: translateY(-10px);
+      }
+
+      &.opposite {
+        align-self: flex-end;
+        perspective-origin: 100% 0%;
       }
 
       &:hover &_item {
@@ -215,15 +240,11 @@ $msg-hover-time: 0.4s;
       }
 
       &:hover &_item .highlight {
-        transform: translateX(-120%) rotate(45deg);
+        transform: translateX(-120%) translateY(-50%) rotate(45deg);
       }
 
       &.opposite:hover &_item .highlight {
-        transform: translateX(120%) rotate(45deg);
-      }
-
-      &.opposite {
-        align-self: flex-end;
+        transform: translateX(120%) translateY(-50%) rotate(45deg);
       }
 
       &_item {
@@ -237,13 +258,14 @@ $msg-hover-time: 0.4s;
         color: $msg-fg;
         align-self: flex-start;
         white-space: pre-wrap;
-        word-break: break-all;
+        hyphens: manual; // doesn't work
+        word-break: break-all; // using this instead
         border-radius: 0 $msg-max-radius $msg-max-radius $msg-max-radius;
         overflow: hidden;
         position: relative;
         transition: transform $msg-hover-time;
 
-        .highlight {  
+        .highlight {
           position: absolute;
           top: 10%;
           left: 0;
@@ -251,7 +273,7 @@ $msg-hover-time: 0.4s;
           width: 300px;
           height: 300px;
           opacity: 0.2;
-          transform: translateX(120%) rotate(45deg);
+          transform: translateX(150%) translateY(50%) rotate(45deg);
           filter: blur(35px);
           transition: all $msg-hover-time;
           background-color: #fff;
@@ -281,7 +303,7 @@ $msg-hover-time: 0.4s;
         border-radius: $msg-max-radius 0 $msg-max-radius $msg-max-radius;
 
         .highlight {
-          transform: translateX(-120%) rotate(45deg);
+          transform: translateX(-120%) translateY(50%) rotate(45deg);
         }
 
         &.stacked {
@@ -305,7 +327,7 @@ $msg-hover-time: 0.4s;
         font-size: 0.8rem;
         opacity: 0;
         width: 100%;
-        transition: opacity 0.2s;
+        transition: opacity 0.1s;
         pointer-events: none;
 
         .expanded,
