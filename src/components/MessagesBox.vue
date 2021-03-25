@@ -7,12 +7,21 @@
         :class="{ opposite: me.id != stack[0].user }"
         class="container_messages-stack"
       >
+        <div class="container_messages-stack_time">
+          <span class="expanded">
+            {{ formatTime(stack[0].at, true) }}
+          </span>
+          <span class="collapsed">
+            {{ formatTime(stack[0].at) }}
+          </span>
+        </div>
         <div
           v-for="(message, k) in stack"
           :key="k"
           class="container_messages-stack_item"
           :class="{ stacked: stack.length > 1 }"
         >
+          <div class="highlight"></div>
           {{ message.content.text }}
         </div>
       </div>
@@ -21,6 +30,8 @@
 </template>
 
 <script>
+import moment from 'moment'
+
 export default {
   name: 'MessagesBox',
   data() {
@@ -29,21 +40,7 @@ export default {
       messages: [
         {
           content: {
-            text: 'привет',
-            attachments: [
-              {
-                type: 'image',
-                url:
-                  'https://sun9-61.userapi.com/impg/AAUWN4BdMpMFYZ2P4IcPAGmKHD85z2PoPdwBWw/uk5z5GJFvQs.jpg?size=563x751&quality=96&sign=eb6853c14b4ee76fc5517e2de382513c&type=album',
-              },
-            ],
-          },
-          user: 8932489,
-          at: 1,
-        },
-        {
-          content: {
-            text: 'привет',
+            text: 'Query parameters can also be provided, either with the query option or directly in the url (example: http://localhost/users?token=abc).',
             attachments: [
               {
                 type: 'image',
@@ -53,11 +50,11 @@ export default {
             ],
           },
           user: 1,
-          at: 2,
+          at: +new Date() + 63510 * 3,
         },
         {
           content: {
-            text: 'ты в порядке? я устала тебя искать',
+            text: 'Creates a new Manager for the given URL, and attempts to reuse an existing Manager for subsequent calls, unless the multiplex option is passed with false. Passing this option is the equivalent of passing "force new connection": true or forceNew: true.',
             attachments: [
               {
                 type: 'image',
@@ -67,11 +64,11 @@ export default {
             ],
           },
           user: 8932489,
-          at: 60003,
+          at: +new Date() + 61394 * 7,
         },
         {
           content: {
-            text: 'волнуюсь',
+            text: 'A new Socket instance is returned for the namespace specified by the pathname in the URL, defaulting to /. For example, if the url is http://localhost/users, a transport connection will be established to http://localhost and a Socket.IO connection will be established to /users.',
             attachments: [
               {
                 type: 'image',
@@ -81,12 +78,12 @@ export default {
             ],
           },
           user: 8932489,
-          at: 60004,
+          at: +new Date() + 61396 * 7,
         },
         {
           content: {
             text:
-              'я волнуюсь я волнуюсь я волнуюсь я волну.юсь яшощя шьш щывашывоьащ89ывоа093оа23зх890аоывжщао90х1гш9щ1АЫВА(ШЫВА)(ШЫВА)9шлз-90шл волнуюсь ВОЛНУЮСЬ',
+              "Hay friends I was trying to make this code. Actually in this code there is no error according to console but I am facing a problem I am not able to control perspective origin and perspective with javascript. If anyone knows why it's not working then I will be very thankful to him/her. I had done many of successful code with same pattern as in this code they all are working but I failed to found error in this code. Before giving answer its humble request that first change do the experiment for yourself by editing code and then give me answer.\n\nNote : I dont want to use css because it is like a controller and if I will use css for this it will not be like a controller anymore.",
             attachments: [
               {
                 type: 'image',
@@ -96,7 +93,22 @@ export default {
             ],
           },
           user: 8932489,
-          at: 61004,
+          at: +new Date() + 67400 * 8,
+        },
+        {
+          content: {
+            text:
+              'Offload aged data from your Atlas cluster to a lower-cost, queryable storage tier. Create an Online Archive to start saving on storage costs.',
+            attachments: [
+              {
+                type: 'image',
+                url:
+                  'https://sun9-61.userapi.com/impg/AAUWN4BdMpMFYZ2P4IcPAGmKHD85z2PoPdwBWw/uk5z5GJFvQs.jpg?size=563x751&quality=96&sign=eb6853c14b4ee76fc5517e2de382513c&type=album',
+              },
+            ],
+          },
+          user: 1,
+          at: +new Date() + 67400 * 8,
         },
       ],
     }
@@ -136,6 +148,13 @@ export default {
       return this.$store.getters.user
     },
   },
+  methods: {
+    formatTime(ts, expand) {
+      const d = moment(ts)
+
+      return expand ? d.format('MMMM Do YYYY, h:mm:ss a') : d.format('LT')
+    },
+  },
 }
 </script>
 
@@ -149,8 +168,10 @@ $msg-min-radius: 5px;
 $msg-max-radius: 0.9rem;
 $msg-padding: 1rem;
 $msg-font-size: 0.95rem;
-$msg-gap: 10px;
-$stacks-gap: 30px;
+$msg-gap: 5px;
+$stacks-gap: 15px;
+
+$msg-hover-time: 0.4s;
 
 .container {
   position: absolute;
@@ -175,6 +196,31 @@ $stacks-gap: 30px;
       display: flex;
       flex-direction: column;
       grid-gap: $msg-gap;
+      position: relative;
+      transform-style: preserve-3d;
+      perspective: 1200px;
+      perspective-origin: 100% 0%;
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: translateY(-10px);
+      }
+
+      &:hover &_item {
+        transform: rotateX(-5deg) rotateY(7deg);
+      }
+
+      &.opposite:hover &_item {
+        transform: rotateX(-5deg) rotateY(-4deg);
+      }
+
+      &:hover &_item .highlight {
+        transform: translateX(-120%) rotate(45deg);
+      }
+
+      &.opposite:hover &_item .highlight {
+        transform: translateX(120%) rotate(45deg);
+      }
 
       &.opposite {
         align-self: flex-end;
@@ -190,8 +236,31 @@ $stacks-gap: 30px;
         font-weight: 500;
         color: $msg-fg;
         align-self: flex-start;
+        white-space: pre-wrap;
         word-break: break-all;
         border-radius: 0 $msg-max-radius $msg-max-radius $msg-max-radius;
+        overflow: hidden;
+        position: relative;
+        transition: transform $msg-hover-time;
+
+        .highlight {  
+          position: absolute;
+          top: 10%;
+          left: 0;
+          border-radius: 100%;
+          width: 300px;
+          height: 300px;
+          opacity: 0.2;
+          transform: translateX(120%) rotate(45deg);
+          filter: blur(35px);
+          transition: all $msg-hover-time;
+          background-color: #fff;
+          pointer-events: none;
+        }
+
+        &::selection {
+          background-color: $subtle-light;
+        }
 
         &.stacked {
           border-radius: 0 $msg-min-radius $msg-min-radius 0;
@@ -211,6 +280,10 @@ $stacks-gap: 30px;
         background: $opp-msg-bg;
         border-radius: $msg-max-radius 0 $msg-max-radius $msg-max-radius;
 
+        .highlight {
+          transform: translateX(-120%) rotate(45deg);
+        }
+
         &.stacked {
           border-radius: $msg-min-radius 0 0 $msg-min-radius;
         }
@@ -221,6 +294,58 @@ $stacks-gap: 30px;
 
         &.stacked:first-child {
           border-radius: $msg-max-radius 0 0 $msg-min-radius;
+        }
+      }
+
+      &_time {
+        left: 0;
+        bottom: -0.4rem;
+        position: absolute;
+        text-align: left;
+        font-size: 0.8rem;
+        opacity: 0;
+        width: 100%;
+        transition: opacity 0.2s;
+        pointer-events: none;
+
+        .expanded,
+        .collapsed {
+          display: block;
+          position: absolute;
+          transition: opacity 0.2s;
+          top: 0;
+        }
+        .expanded {
+          opacity: 0;
+        }
+        .collapsed {
+          opacity: 1;
+        }
+      }
+
+      &.opposite &_time {
+        right: 0;
+        text-align: right;
+
+        .expanded,
+        .collapsed {
+          right: 0;
+        }
+      }
+
+      &:hover &_time {
+        opacity: 0.5;
+        transition: opacity 0.4s;
+
+        .expanded,
+        .collapsed {
+          transition-delay: 1s;
+        }
+        .expanded {
+          opacity: 1;
+        }
+        .collapsed {
+          opacity: 0;
         }
       }
     }

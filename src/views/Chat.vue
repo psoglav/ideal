@@ -22,9 +22,7 @@ export default {
     MessagesBox,
   },
   data() {
-    return {
-      connectionSegments: 10,
-    }
+    return {}
   },
   computed: {
     me() {
