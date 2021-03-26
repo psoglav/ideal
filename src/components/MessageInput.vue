@@ -4,18 +4,17 @@
     :class="{ focused: inputFocused }"
     @click="focusInput"
   >
-    <span v-if="!input" class="message-input_placeholder">Start typing...</span>
-    {{ input }}
-    <div class="message-input_container common">
-      <textarea
-        class="message-input_container_input"
-        ref="input"
-        type="text"
-        @keypress.enter.prevent="handleSubmit"
-        @keydown.ctrl.enter="enterNewLine"
-        v-model="input"
-      ></textarea>
-    </div>
+    <span :class="{ hidden: input }" class="message-input_placeholder"
+      >Start typing...</span
+    >
+    <div
+      ref="input"
+      class="message-input_editor common"
+      @input="handleInput"
+      contenteditable="true"
+      spellcheck="false"
+      tabindex="0"
+    ></div>
     <div
       @click="handleSubmit"
       :class="{ hidden: submitHidden || !inputFocused }"
@@ -55,10 +54,15 @@ export default {
     focusInput() {
       this.$refs.input.focus()
     },
+    handleInput() {
+      this.input = this.$refs.input.innerText
+      console.log(this.input)
+    },
     handleSubmit() {
       if (!this.input) return
       this.$emit('send-message', this.input)
       this.$root.$emit('hit-participant')
+      this.$refs.input.innerText = ''
       this.input = ''
     },
     enterNewLine() {
@@ -109,11 +113,10 @@ export default {
   width: 40%;
   height: auto;
   z-index: 100;
-  min-height: 38px;
   max-height: 30vh;
 
   transition: height 0.1s, box-shadow 0.4s, opacity 0.3s;
-  overflow: hidden;
+  overflow-x: hidden;
 
   border-radius: 20px;
   backdrop-filter: blur(10px);
@@ -127,48 +130,51 @@ export default {
   word-break: break-all;
   text-align: left;
   user-select: none;
-  cursor: text;
 
   &.focused {
     box-shadow: 0 0 10px 2px black, 0 0 100px 1px transparentize($light, 0.7);
   }
 
   &_placeholder {
+    top: 16px;
+    left: 36px;
+    position: absolute;
     letter-spacing: 0;
     color: $half-light;
     font-style: italic;
+    transition: all 0.4s;
+
+    &.hidden {
+      transform: scale(1.3);
+      opacity: 0;
+    }
   }
 
-  &_container {
+  &_editor {
     top: 0;
     left: 0;
-    pointer-events: none;
     z-index: 10;
     width: 100%;
-    height: 100%;
+    min-height: 38px;
     user-select: none;
 
-    &_input {
-      pointer-events: all;
-      overflow-x: hidden;
-      position: relative;
-      width: 100%;
-      height: 100%;
-      border: none;
-      word-break: break-all;
-      resize: none;
-      color: white;
-      background-color: transparent;
-      font-family: 'Open Sans', Montserrat, sans-serif;
-      font-size: 1rem;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: none;
+    word-break: break-all;
+    color: white;
+    background-color: transparent;
+    font-family: 'Open Sans', Montserrat, sans-serif;
+    font-size: 1rem;
 
-      &:focus {
-        outline: none;
-      }
+    &:focus {
+      outline: none;
+    }
 
-      &::selection {
-        background-color: $subtle-light;
-      }
+    &::selection,
+    *::selection {
+      background-color: $subtle-light;
     }
   }
 
@@ -195,7 +201,7 @@ export default {
 
     &.hidden {
       transition: all 0.8s;
-      // z-index: 5;
+      z-index: 5;
       opacity: 0;
       filter: blur(50px);
     }
