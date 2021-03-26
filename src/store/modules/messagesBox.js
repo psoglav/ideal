@@ -14,7 +14,7 @@ const state = {
         ],
       },
       user: 1,
-      at: +new Date() + 63510 * 3,
+      at: +new Date() - 63510 * 3,
     },
     {
       content: {
@@ -29,7 +29,7 @@ const state = {
         ],
       },
       user: 8932489,
-      at: +new Date() + 61394 * 7,
+      at: +new Date() - 61394 * 7,
     },
     {
       content: {
@@ -44,7 +44,7 @@ const state = {
         ],
       },
       user: 8932489,
-      at: +new Date() + 61396 * 7,
+      at: +new Date() - 61396 * 7,
     },
     {
       content: {
@@ -59,7 +59,7 @@ const state = {
         ],
       },
       user: 8932489,
-      at: +new Date() + 67400 * 8,
+      at: +new Date() - 67400 * 8,
     },
     {
       content: {
@@ -74,7 +74,7 @@ const state = {
         ],
       },
       user: 1,
-      at: +new Date() + 67400 * 8,
+      at: +new Date() - 67400 * 8,
     },
     {
       content: {
@@ -89,13 +89,15 @@ const state = {
         ],
       },
       user: 1,
-      at: +new Date() + 67400 * 8,
+      at: +new Date() - 67400 * 8,
     },
   ],
 }
 
 const mutations = {
-
+  ADD_MESSAGE(state, message) {
+    state.messages.push(message)
+  }
 }
 
 const actions = {
@@ -104,6 +106,7 @@ const actions = {
 
 const getters = {
   messages: state => state.messages,
+  // messages: () => []
 }
 
 export default {

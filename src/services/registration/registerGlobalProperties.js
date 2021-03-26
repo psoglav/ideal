@@ -8,7 +8,9 @@ const properties = {
         return [...Array(n).keys()]
     },
     scrollTo(el, top) {
-        el.scrollTop = top ? 0 : el.scrollHeight
+        setTimeout(() => {
+            el.scrollTop = top ? 0 : el.scrollHeight
+        }, 0)
     }
 }
 

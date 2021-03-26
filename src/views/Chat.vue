@@ -6,6 +6,7 @@
       <chat-participant :profile="me" me status="typing" />
     </div>
     <messages-box />
+    <message-input @send-message="sendMessage" />
   </div>
 </template>
 
@@ -13,6 +14,7 @@
 import Connection from '~/Connection'
 import ChatParticipant from '~/ChatParticipant'
 import MessagesBox from '~/MessagesBox'
+import MessageInput from '~/MessageInput'
 
 export default {
   name: 'Chat',
@@ -20,6 +22,7 @@ export default {
     Connection,
     ChatParticipant,
     MessagesBox,
+    MessageInput,
   },
   data() {
     return {}
@@ -30,6 +33,18 @@ export default {
     },
     user() {
       return this.$store.getters.user
+    },
+  },
+  methods: {
+    sendMessage(text) {
+      this.$store.commit('ADD_MESSAGE', {
+        content: {
+          text,
+          attachments: [],
+        },
+        user: 1,
+        at: +new Date(),
+      })
     },
   },
 }
@@ -53,14 +68,14 @@ export default {
     left: 0;
     width: 100%;
     height: 100px;
-    z-index: 9;
+    z-index: 2;
     pointer-events: none;
     background: linear-gradient(0deg, transparent, black);
   }
 
   &::after {
     top: auto;
-    bottom: 0px;
+    bottom: 120px;
     background: linear-gradient(180deg, transparent, black);
   }
 

@@ -6,6 +6,9 @@ p<template>
         :key="i"
         :class="{ opposite: me.id != stack[0].user }"
         class="container_messages-stack"
+        :style="{
+          perspective: stack.length * 1500 + 'px',
+        }"
       >
         <div class="container_messages-stack_time">
           <span class="expanded">
@@ -64,10 +67,7 @@ export default {
           }
         }
 
-        // const el = this.$refs.messagesContainer
-        // setTimeout(() => {
-        // el.scrollTop = 2000
-        // }, 100)
+        this.$scrollTo(this.$el)
       },
     },
   },
@@ -91,7 +91,7 @@ export default {
   },
   mounted() {
     this.$scrollTo(this.$el)
-  }
+  },
 }
 </script>
 
@@ -115,7 +115,7 @@ $msg-hover-time: 0.4s;
   padding: 80px 0;
   z-index: 0;
   top: 0;
-  height: 100%;
+  height: calc(100% - 120px);
   width: 100%;
   overflow: auto;
   overflow-x: hidden;
@@ -137,7 +137,6 @@ $msg-hover-time: 0.4s;
       grid-gap: $msg-gap;
       position: relative;
       transform-style: preserve-3d;
-      perspective: 1500px;
       perspective-origin: 0% 0%;
       transition: transform 0.2s;
 
