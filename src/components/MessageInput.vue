@@ -186,14 +186,15 @@ export default {
     display: grid;
     align-content: center;
     font-size: 0.9rem;
+    z-index: 300;
     transition: all 0.2s;
-    z-index: 200;
 
     &:hover {
       background-color: $subtle-light;
     }
 
     &.hidden {
+      transition: all 0.8s;
       // z-index: 5;
       opacity: 0;
       filter: blur(50px);
